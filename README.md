@@ -1,7 +1,7 @@
 # simplePopup
 Simple jQuery popup window
 
-![Alt text](example.png?raw=true "Example")
+![Alt text](Example.png?raw=true "Example")
 
 ````javascript
 $('div').popupWindow({
