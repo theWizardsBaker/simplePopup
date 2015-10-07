@@ -25,7 +25,7 @@
 	font-weight: bold;
 	font-family: Tahoma,Verdana,Segoe,sans-serif;
 	color: #FFF;
-	background-color: #077889;
+	background-color: #4679BD;
 	padding: 10px;
 	border-radius: 10px 10px 0 0;
 	border-bottom: 1px solid #000;
@@ -78,11 +78,13 @@
 
 .popup-overlay-close {
 	position: absolute;
-	width: 98%;
-	top: -25px;
+	width: 99%;
+	top: -20px;
 	text-align: right;
 	font-weight: bold;
 	cursor: pointer;
 	color: #FFF;
-	text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+	text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+	font-family: sans-serif;
+	font-size: 0.7em;
 }

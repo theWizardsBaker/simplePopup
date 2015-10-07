@@ -2,9 +2,9 @@
  
 (function($){
 	// popup window
-	$.fn.popupWindow = function(windowOptions){
+	$.fn.popupWindow = function(winOptions){
 
-		var windowOptions = windowOptions || {};
+		var windowOptions = winOptions || {};
 
 		var options = {
 			openEvent : 'click',
@@ -19,7 +19,8 @@
 				show : false,
 				text : ''
 			},
-			closeOnClick : true,
+			closeText : true,
+			closeOnBackgroundClick : true,
 			closeOnEscape: true,
 			context : $(this)
 		};
@@ -34,7 +35,7 @@
 
 		function _init(){
 			// if the popu div doesn't exit, build it
-			if($('div.popup-position').length == 0){
+			if($('div.popup-position').length === 0){
 
 				var popup = $('<div>').addClass('popup')
 									  .append(
@@ -48,7 +49,25 @@
 					$('<div>').addClass('popup-position').append(popup)
 				).append(
 					$('<div id="overlay">').addClass('popup-overlay')
-				);
+				);				
+
+				if(options.title.show){				
+					//show title
+					$('div.popup-title').text(options.title.text).css('display', 'block');
+				}
+
+				// add close text to the popup
+				if(options.closeText){	
+					var text = options.closeOnEscape ? 'Close [esc]' : 'Close';
+					$('div.popup').append(
+						$('<div>').text(text).addClass('popup-overlay-close')
+					);
+				}
+				// clicking the close text closes the window
+				$('div.popup-overlay-close').on('click', function(event) {
+					_closeWindow($(options.context));
+				});
+
 			}
 		}
 
@@ -59,26 +78,17 @@
 				$('div#overlay').addClass('popup-overlay-visible');
 				$('div.popup-position').addClass('popup-position-visible');
 				$('div.popup div.popup-content').empty()
-							  .css(options.windowCSS)
-							  .html(options.windowContent.call(item));
+							  					.css(options.windowCSS)
+							  					.html(options.windowContent.call(item));
 				$('div.popup').addClass('popup-visible');
-
-				if(options.title.show){				
-					//show title
-					$('div.popup-title').text(options.title.text).css('display', 'block');
-				}
-
-				if(options.closeOnClick){
-					var text = options.closeOnEscape ? 'Close [esc]' : 'Close';
-					$('div.popup').append(
-						$('<div>').text(text).addClass('popup-overlay-close')
-					).on('click', function(event) {
-						_closeWindow(item);
+					
+				//clicking the grey overlay will close the window
+				if(options.closeOnBackgroundClick){
+					$(document).on('click.popupWindow', '.popup-overlay', function(){
+						console.log("HELLO!");
+						_closeWindow($(options.context));
 					});
 				}
-
-				//set unbinds for the window if already in place
-				$(document).unbind('keyup.popupWindow').unbind('click.popupWindow');
 				
 				//set buttons to close window
 				if(options.closeOnEscape){
@@ -86,12 +96,6 @@
 						if(event.keyCode == 27){
 							_closeWindow(item);
 						}
-					});
-				}
-
-				if(options.closeOnClick){
-					$(document).on('click.popupWindow', '.popup-overlay', function(){
-						_closeWindow(item);
 					});
 				}
 			});
@@ -104,6 +108,9 @@
 				$(document).find('div.popup-position').removeClass('popup-position-visible');
 				$(document).find('div#popup').removeClass('popup-visible');
 				$(document).unbind('keyup.popupWindow');
+
+				//set unbinds for the window if already in place
+				$(document).unbind('keyup.popupWindow').unbind('click.popupWindow');
 			});
 		}
 
@@ -117,5 +124,5 @@
 				_openPopup(elm);
 			});
 		});
-	}
+	};
 })( jQuery );
